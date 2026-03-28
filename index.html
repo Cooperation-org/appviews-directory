@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATProto App Directory — powered by LinkedClaims</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #F8FAFC; color: #0F172A; min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: #fff; border-bottom: 1px solid #E2E8F0; padding: 1.5rem 2rem;
+    text-align: center;
+  }
+  .header h1 { font-size: 1.8rem; font-weight: 700; color: #065F46; margin-bottom: 0.3rem; }
+  .header .subtitle { font-size: 0.95rem; color: #64748B; font-weight: 400; }
+  .header .subtitle a { color: #22D3EE; text-decoration: none; font-weight: 500; }
+  .header .subtitle a:hover { text-decoration: underline; }
+
+  /* FILTER BAR */
+  .filter-bar {
+    display: flex; justify-content: center; gap: 0.5rem; padding: 1rem 2rem;
+    background: #fff; border-bottom: 1px solid #E2E8F0; flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 0.4rem 1.2rem; background: #F1F5F9; color: #475569; border: 1px solid #E2E8F0;
+    border-radius: 9999px; cursor: pointer; font-size: 0.85rem; font-family: inherit;
+    font-weight: 500; transition: all 0.2s ease;
+  }
+  .filter-btn:hover { border-color: #10B981; color: #065F46; background: #D1FAE5; }
+  .filter-btn.active { background: #10B981; color: #fff; border-color: #10B981; }
+
+  /* APP GRID */
+  .app-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+    max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem;
+  }
+
+  .app-card {
+    background: #fff; border: 1px solid #E2E8F0; border-radius: 12px;
+    padding: 1.5rem; cursor: pointer; transition: all 0.3s ease;
+    display: flex; flex-direction: column; gap: 0.6rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  }
+  .app-card:hover {
+    box-shadow: 0 10px 15px rgba(0,0,0,0.08); transform: translateY(-2px);
+    border-color: #CBD5E1;
+  }
+
+  .app-card-top { display: flex; align-items: center; gap: 0.8rem; }
+  .app-card-img {
+    width: 48px; height: 48px; border-radius: 10px; object-fit: cover;
+    background: #F1F5F9; flex-shrink: 0;
+  }
+  .app-card-info { flex: 1; min-width: 0; }
+  .app-card-name { font-size: 1.05rem; font-weight: 600; color: #0F172A; }
+  .app-card-desc {
+    font-size: 0.82rem; color: #64748B; margin-top: 0.15rem; font-weight: 400;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+
+  .app-card-meta { display: flex; align-items: center; gap: 0.6rem; margin-top: auto; }
+  .badge {
+    display: inline-block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.06em; padding: 0.2rem 0.6rem; border-radius: 4px;
+  }
+  .badge-app { background: #E0F2FE; color: #0369A1; }
+  .badge-appview { background: #F3E8FF; color: #6B21A8; }
+  .stars-display { font-size: 0.85rem; color: #F59E0B; letter-spacing: 1px; }
+  .rating-count { font-size: 0.75rem; color: #94A3B8; font-weight: 500; }
+
+  /* MODAL OVERLAY */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.5);
+    z-index: 100; justify-content: center; align-items: flex-start;
+    padding: 3rem 1rem; overflow-y: auto;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: #fff; border-radius: 12px; max-width: 600px; width: 100%;
+    padding: 2rem; position: relative; animation: slideUp 0.2s ease-out;
+    box-shadow: 0 20px 25px rgba(0,0,0,0.08);
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .modal-close {
+    position: absolute; top: 1rem; right: 1rem; background: #F1F5F9;
+    border: none; width: 32px; height: 32px; border-radius: 50%;
+    font-size: 1.1rem; cursor: pointer; color: #64748B; display: flex;
+    align-items: center; justify-content: center; transition: all 0.2s;
+  }
+  .modal-close:hover { background: #E2E8F0; color: #0F172A; }
+
+  .modal-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+  .modal-img { width: 64px; height: 64px; border-radius: 14px; object-fit: cover; background: #F1F5F9; }
+  .modal-title { font-size: 1.4rem; font-weight: 700; color: #065F46; }
+  .modal-type { margin-top: 0.2rem; }
+  .modal-desc { font-size: 0.95rem; color: #334155; line-height: 1.6; margin-bottom: 0.5rem; }
+  .modal-link { font-size: 0.85rem; color: #22D3EE; text-decoration: none; word-break: break-all; font-weight: 500; }
+  .modal-link:hover { text-decoration: underline; color: #0891B2; }
+
+  .modal-section-title {
+    font-size: 1rem; font-weight: 600; color: #065F46; margin: 1.5rem 0 0.8rem;
+    border-top: 1px solid #E2E8F0; padding-top: 1rem;
+  }
+
+  /* RATE THIS APP */
+  .rate-form { display: flex; flex-direction: column; gap: 0.6rem; }
+  .star-selector { display: flex; gap: 0.3rem; }
+  .star-selector span {
+    font-size: 1.8rem; cursor: pointer; color: #E2E8F0; transition: color 0.15s;
+    user-select: none;
+  }
+  .star-selector span:hover, .star-selector span.active { color: #F59E0B; }
+  .rate-input, .rate-email {
+    width: 100%; padding: 0.6rem 0.8rem; border: 1px solid #E2E8F0; border-radius: 8px;
+    font-size: 0.9rem; font-family: inherit; color: #0F172A; background: #fff;
+  }
+  .rate-input { resize: vertical; min-height: 60px; }
+  .rate-input:focus, .rate-email:focus { outline: none; border-color: #10B981; box-shadow: 0 0 0 3px rgba(16,185,129,0.15); }
+  .auth-row { display: flex; gap: 0.5rem; position: relative; }
+  .auth-row .rate-email { flex: 1; }
+  .auth-note { font-size: 0.75rem; color: #94A3B8; }
+
+  /* TYPEAHEAD DROPDOWN */
+  .ta-dropdown {
+    position: absolute; top: 100%; left: 0; right: 0; z-index: 200;
+    background: #fff; border: 1px solid #E2E8F0; border-top: none;
+    border-radius: 0 0 8px 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+    max-height: 240px; overflow-y: auto; display: none;
+  }
+  .ta-dropdown.open { display: block; }
+  .ta-item {
+    display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.8rem;
+    cursor: pointer; transition: background 0.1s;
+  }
+  .ta-item:hover, .ta-item.active { background: #D1FAE5; }
+  .ta-avatar {
+    width: 32px; height: 32px; border-radius: 50%; object-fit: cover;
+    background: #F1F5F9; flex-shrink: 0;
+  }
+  .ta-info { flex: 1; min-width: 0; overflow: hidden; }
+  .ta-name { font-size: 0.85rem; font-weight: 600; color: #0F172A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ta-handle { font-size: 0.78rem; color: #64748B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rate-submit {
+    align-self: flex-start; padding: 0.55rem 1.5rem; background: #10B981; color: #fff;
+    border: none; border-radius: 8px; font-size: 0.9rem; cursor: pointer;
+    font-weight: 600; font-family: inherit; transition: background 0.2s;
+  }
+  .rate-submit:hover { background: #065F46; }
+  .rate-submit:disabled { background: #94A3B8; cursor: not-allowed; }
+  .rate-msg { font-size: 0.85rem; min-height: 1.2em; font-weight: 500; }
+  .rate-msg.success { color: #10B981; }
+  .rate-msg.error { color: #EF4444; }
+
+  /* REVIEWS LIST */
+  .reviews-list { display: flex; flex-direction: column; gap: 0.8rem; }
+  .review-item { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 0.8rem 1rem; }
+  .review-stars { font-size: 0.9rem; color: #F59E0B; letter-spacing: 1px; }
+  .review-text { font-size: 0.85rem; color: #334155; margin-top: 0.3rem; line-height: 1.5; }
+  .review-date { font-size: 0.75rem; color: #94A3B8; margin-top: 0.3rem; }
+  .no-reviews { font-size: 0.85rem; color: #94A3B8; font-style: italic; }
+  .loading-reviews { font-size: 0.85rem; color: #94A3B8; }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 2rem 1rem; color: #64748B; font-size: 0.8rem;
+    border-top: 1px solid #E2E8F0; margin-top: 2rem; background: #F1F5F9;
+  }
+  footer a { color: #22D3EE; text-decoration: none; font-weight: 500; }
+  footer a:hover { text-decoration: underline; color: #0891B2; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .app-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .header h1 { font-size: 1.4rem; }
+    .modal { padding: 1.5rem; }
+    .modal-overlay { padding: 1.5rem 0.8rem; }
+  }
+  @media (max-width: 480px) {
+    .app-grid { grid-template-columns: 1fr; }
+    .header { padding: 1.2rem 1rem; }
+    .header h1 { font-size: 1.2rem; }
+    .filter-bar { padding: 0.8rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>ATProto App Directory</h1>
+  <div class="subtitle">Powered by <a href="https://linkedtrust.us">LinkedClaims</a> &mdash; rate and discover apps built on the AT Protocol</div>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filterApps('all')">All</button>
+  <button class="filter-btn" onclick="filterApps('app')">Apps</button>
+  <button class="filter-btn" onclick="filterApps('appview')">AppViews</button>
+</div>
+
+<div class="app-grid" id="appGrid"></div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <div class="modal-header">
+      <img class="modal-img" id="modalImg" src="" alt="">
+      <div>
+        <div class="modal-title" id="modalTitle"></div>
+        <div class="modal-type" id="modalType"></div>
+      </div>
+    </div>
+    <div class="modal-desc" id="modalDesc"></div>
+    <a class="modal-link" id="modalLink" href="#" target="_blank" rel="noopener"></a>
+
+    <div class="modal-section-title">Rate This App</div>
+    <div class="rate-form">
+      <div class="star-selector" id="starSelector">
+        <span onclick="selectStar(1)">&#9733;</span>
+        <span onclick="selectStar(2)">&#9733;</span>
+        <span onclick="selectStar(3)">&#9733;</span>
+        <span onclick="selectStar(4)">&#9733;</span>
+        <span onclick="selectStar(5)">&#9733;</span>
+      </div>
+      <textarea class="rate-input" id="rateComment" placeholder="Write a short review (optional)"></textarea>
+      <div class="auth-row" id="authRow">
+        <input class="rate-email" type="text" id="rateHandle" placeholder="Your Bluesky handle (e.g. alice.bsky.social)" autocomplete="off">
+        <div class="ta-dropdown" id="taDropdown"></div>
+      </div>
+      <div class="auth-note">Your handle is recorded as the source of your rating claim.</div>
+      <button class="rate-submit" id="rateSubmit" onclick="submitRating()">Submit Rating</button>
+      <div class="rate-msg" id="rateMsg"></div>
+    </div>
+
+    <div class="modal-section-title">Reviews</div>
+    <div class="reviews-list" id="reviewsList">
+      <div class="loading-reviews">Loading reviews...</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  ATProto App Directory &mdash; built with <a href="https://linkedtrust.us">LinkedClaims</a>
+  &mdash; <a href="https://github.com/nickreserved/linkedclaims">Source</a>
+</footer>
+
+<script>
+const API_BASE = 'https://live.linkedtrust.us';
+let selectedStars = 0;
+let currentApp = null;
+let authToken = '';
+let savedHandle = localStorage.getItem('appviews_handle') || '';
+
+const APPS = [
+  { uri: "https://bsky.app", name: "Bluesky", description: "The official Bluesky social client", type: "app", image: "https://bsky.app/static/apple-touch-icon.png" },
+  { uri: "https://graysky.app", name: "Graysky", description: "A sleek third-party Bluesky client for iOS and Android", type: "app", image: "https://graysky.app/favicon.ico" },
+  { uri: "https://deck.blue", name: "deck.blue", description: "TweetDeck-style multi-column client for Bluesky", type: "app", image: "https://deck.blue/favicon.ico" },
+  { uri: "https://grain.social", name: "Grain", description: "Decentralized photo-sharing gallery platform built on ATProto", type: "appview", image: "https://grain.social/icon-192.png" },
+  { uri: "https://langit.pages.dev", name: "Langit", description: "Mobile-first Bluesky client with a clean interface", type: "app", image: "https://langit.pages.dev/favicon.ico" },
+  { uri: "https://tokimekibluesky.vercel.app", name: "TOKIMEKI", description: "Japanese-designed Bluesky web client with timeline customization", type: "app", image: "https://tokimekibluesky.vercel.app/favicon.png" },
+  { uri: "https://tangled.sh", name: "Tangled", description: "Git collaboration platform with decentralized code ownership on ATProto", type: "appview", image: "https://tangled.sh/favicon.ico" },
+  { uri: "https://clearsky.app", name: "Clearsky", description: "Block and mute list transparency tool for ATProto", type: "app", image: "https://clearsky.app/favicon.ico" },
+  { uri: "https://skyfeed.app", name: "SkyFeed", description: "Custom feed builder and viewer for Bluesky", type: "appview", image: "https://skyfeed.app/favicon.ico" },
+  { uri: "https://skyview.social", name: "Skyview", description: "View Bluesky threads and posts without an account", type: "app", image: "https://skyview.social/favicon.ico" },
+  { uri: "https://whtwnd.com", name: "WhiteWind", description: "Blog publishing platform built on ATProto", type: "appview", image: "https://whtwnd.com/favicon.ico" },
+  { uri: "https://smokesignal.events", name: "Smoke Signal", description: "Event discovery and RSVP platform on ATProto", type: "appview", image: "https://smokesignal.events/favicon.ico" },
+  { uri: "https://frontpage.fyi", name: "Frontpage", description: "Link aggregator and discussion forum on ATProto", type: "appview", image: "https://frontpage.fyi/apple-icon.png" },
+  { uri: "https://bluecast.app", name: "Bluecast", description: "Podcast directory and player using ATProto social graph", type: "appview", image: "https://bluecast.app/favicon.ico" },
+  { uri: "https://www.skeetsapp.com", name: "Skeets", description: "Full-featured native iOS client for Bluesky with accessibility focus", type: "app", image: "https://www.skeetsapp.com/favicon.ico" },
+  { uri: "https://blueskydirectory.com", name: "Bluesky Directory", description: "Comprehensive directory of Bluesky and ATProto tools, apps, and utilities", type: "app", image: "https://blueskydirectory.com/favicon.ico" },
+  { uri: "https://firesky.tv", name: "Firesky", description: "Real-time firehose visualizer for the ATProto network", type: "app", image: "https://firesky.tv/favicon.ico" },
+  { uri: "https://blueviewer.pages.dev", name: "Blueviewer", description: "Public profile viewer for Bluesky accounts", type: "app", image: "https://blueviewer.pages.dev/favicon.ico" },
+  { uri: "https://linkedtrust.us", name: "LinkedTrust", description: "Trust and claims platform for verifiable attestations on ATProto", type: "appview", image: "https://linkedtrust.us/static/img/logo.523bee24fbc7.svg" },
+  { uri: "https://bsky.social", name: "Bluesky PDS", description: "Official Bluesky Personal Data Server hosting service", type: "appview", image: "https://bsky.app/static/apple-touch-icon.png" },
+  { uri: "https://recipe.exchange", name: "Recipe Exchange", description: "Decentralized recipe-sharing platform where cooks own their content on ATProto", type: "appview", image: "https://recipe.exchange/favicon.ico" },
+  { uri: "https://bsky.app/profile/ameboh.bsky.social", name: "Amebo Bot", description: "Your ATProto conference buddy — ask about ATmosphere Conf 2026, atproto docs, talks, speakers, and schedule", type: "app", image: "https://bsky.app/static/apple-touch-icon.png" }
+];
+
+// Rating cache: { uri: { avg, count } }
+const ratingsCache = {};
+
+function renderStars(avg, max) {
+  max = max || 5;
+  let s = '';
+  const rounded = Math.round(avg);
+  for (let i = 1; i <= max; i++) {
+    s += i <= rounded ? '\u2605' : '\u2606';
+  }
+  return s;
+}
+
+function createAppCard(app) {
+  const card = document.createElement('div');
+  card.className = 'app-card';
+  card.dataset.type = app.type;
+  card.onclick = function() { openModal(app); };
+
+  const r = ratingsCache[app.uri] || { avg: 0, count: 0 };
+  const starsHTML = r.count > 0 ? renderStars(r.avg) : '';
+  const countHTML = r.count > 0 ? '(' + r.count + ')' : '';
+
+  card.innerHTML =
+    '<div class="app-card-top">' +
+      '<img class="app-card-img" src="' + escapeAttr(app.image) + '" alt="' + escapeAttr(app.name) + '" onerror="this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22><rect fill=%22%23e0e0e5%22 width=%2248%22 height=%2248%22 rx=%228%22/><text x=%2224%22 y=%2230%22 text-anchor=%22middle%22 fill=%22%23999%22 font-size=%2220%22>' + escapeAttr(app.name.charAt(0)) + '</text></svg>\'">' +
+      '<div class="app-card-info">' +
+        '<div class="app-card-name">' + escapeHTML(app.name) + '</div>' +
+        '<div class="app-card-desc">' + escapeHTML(app.description) + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="app-card-meta">' +
+      '<span class="badge badge-' + app.type + '">' + app.type + '</span>' +
+      (starsHTML ? '<span class="stars-display">' + starsHTML + '</span>' : '') +
+      (countHTML ? '<span class="rating-count">' + countHTML + '</span>' : '') +
+    '</div>';
+
+  return card;
+}
+
+function renderGrid(filter) {
+  const grid = document.getElementById('appGrid');
+  grid.innerHTML = '';
+  APPS.forEach(function(app) {
+    if (filter && filter !== 'all' && app.type !== filter) return;
+    grid.appendChild(createAppCard(app));
+  });
+}
+
+function filterApps(type) {
+  document.querySelectorAll('.filter-btn').forEach(function(b) {
+    b.classList.toggle('active', b.textContent.toLowerCase() === type || (type === 'all' && b.textContent === 'All'));
+  });
+  renderGrid(type);
+}
+
+async function fetchRatings(uri) {
+  try {
+    const res = await fetch(API_BASE + '/api/claims/subject/' + encodeURIComponent(uri));
+    if (!res.ok) return [];
+    const data = await res.json();
+    const claims = Array.isArray(data) ? data : (data.claims || []);
+    return claims.filter(function(c) { return c.claim === 'rated' || c.claim === 'rating'; });
+  } catch (e) {
+    return [];
+  }
+}
+
+async function loadAllRatings() {
+  const promises = APPS.map(async function(app) {
+    const ratings = await fetchRatings(app.uri);
+    if (ratings.length > 0) {
+      const total = ratings.reduce(function(sum, r) { return sum + (Number(r.stars) || 0); }, 0);
+      ratingsCache[app.uri] = { avg: total / ratings.length, count: ratings.length };
+    }
+  });
+  await Promise.allSettled(promises);
+  renderGrid('all');
+}
+
+async function openModal(app) {
+  currentApp = app;
+  selectedStars = 0;
+
+  document.getElementById('modalImg').src = app.image;
+  document.getElementById('modalImg').onerror = function() {
+    this.src = 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect fill=%22%23e0e0e5%22 width=%2264%22 height=%2264%22 rx=%2212%22/><text x=%2232%22 y=%2240%22 text-anchor=%22middle%22 fill=%22%23999%22 font-size=%2228%22>' + encodeURIComponent(app.name.charAt(0)) + '</text></svg>';
+  };
+  document.getElementById('modalTitle').textContent = app.name;
+  document.getElementById('modalType').innerHTML = '<span class="badge badge-' + app.type + '">' + app.type + '</span>';
+  document.getElementById('modalDesc').textContent = app.description;
+  document.getElementById('modalLink').href = app.uri;
+  document.getElementById('modalLink').textContent = app.uri;
+  document.getElementById('rateComment').value = '';
+  document.getElementById('rateHandle').value = savedHandle;
+  document.getElementById('rateMsg').textContent = '';
+  document.getElementById('rateMsg').className = 'rate-msg';
+  updateStarSelector();
+
+  document.getElementById('reviewsList').innerHTML = '<div class="loading-reviews">Loading reviews...</div>';
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  await loadReviews(app.uri);
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  currentApp = null;
+}
+
+function selectStar(n) {
+  selectedStars = n;
+  updateStarSelector();
+}
+
+function updateStarSelector() {
+  var spans = document.getElementById('starSelector').children;
+  for (var i = 0; i < spans.length; i++) {
+    spans[i].classList.toggle('active', i < selectedStars);
+  }
+}
+
+async function loadReviews(uri) {
+  const container = document.getElementById('reviewsList');
+  const ratings = await fetchRatings(uri);
+
+  if (ratings.length === 0) {
+    container.innerHTML = '<div class="no-reviews">No reviews yet. Be the first to rate this app!</div>';
+    return;
+  }
+
+  // Sort newest first
+  ratings.sort(function(a, b) {
+    return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+  });
+
+  container.innerHTML = '';
+  ratings.forEach(function(r) {
+    const div = document.createElement('div');
+    div.className = 'review-item';
+    const stars = Number(r.stars) || 0;
+    const dateStr = r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '';
+    var source = r.sourceURI || '';
+    var reviewer = '';
+    if (source.includes('bsky.app/profile/')) {
+      reviewer = '@' + source.split('bsky.app/profile/')[1];
+    } else if (source.startsWith('did:')) {
+      reviewer = source.slice(0, 20) + '...';
+    }
+    div.innerHTML =
+      '<div class="review-stars">' + renderStars(stars) + (reviewer ? ' <span style="color:#64748B;font-size:0.8rem;letter-spacing:0">' + escapeHTML(reviewer) + '</span>' : '') + '</div>' +
+      (r.statement ? '<div class="review-text">' + escapeHTML(r.statement) + '</div>' : '') +
+      (dateStr ? '<div class="review-date">' + dateStr + '</div>' : '');
+    container.appendChild(div);
+  });
+}
+
+// --- TYPEAHEAD ---
+var TYPEAHEAD_URL = 'https://typeahead.waow.tech';
+var taTimer = null;
+var taIndex = -1;
+var taActors = [];
+
+function initTypeahead() {
+  var input = document.getElementById('rateHandle');
+  var dropdown = document.getElementById('taDropdown');
+
+  input.addEventListener('input', function() {
+    var q = input.value.trim().replace(/^@/, '');
+    if (q.length < 2) { closeTA(); return; }
+    clearTimeout(taTimer);
+    taTimer = setTimeout(function() { fetchTA(q); }, 200);
+  });
+
+  input.addEventListener('keydown', function(e) {
+    if (!dropdown.classList.contains('open')) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      taIndex = Math.min(taIndex + 1, taActors.length - 1);
+      highlightTA();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      taIndex = Math.max(taIndex - 1, 0);
+      highlightTA();
+    } else if (e.key === 'Enter' && taIndex >= 0) {
+      e.preventDefault();
+      selectTA(taActors[taIndex]);
+    } else if (e.key === 'Escape') {
+      closeTA();
+    }
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.auth-row')) closeTA();
+  });
+}
+
+async function fetchTA(query) {
+  try {
+    var res = await fetch(
+      TYPEAHEAD_URL + '/xrpc/app.bsky.actor.searchActorsTypeahead?q=' + encodeURIComponent(query) + '&limit=8',
+      { headers: { 'X-Client': 'appviews.linkedtrust.us' } }
+    );
+    if (!res.ok) return;
+    var data = await res.json();
+    taActors = data.actors || [];
+    renderTA();
+  } catch (e) {
+    // Silently fail — user can still type manually
+  }
+}
+
+function renderTA() {
+  var dropdown = document.getElementById('taDropdown');
+  if (taActors.length === 0) { closeTA(); return; }
+  taIndex = -1;
+  dropdown.innerHTML = taActors.map(function(actor, i) {
+    var name = actor.displayName || actor.handle;
+    var avatarFallback = 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect fill=%22%23E2E8F0%22 width=%2232%22 height=%2232%22 rx=%2216%22/><text x=%2216%22 y=%2220%22 text-anchor=%22middle%22 fill=%22%2394A3B8%22 font-size=%2214%22>' + encodeURIComponent(name.charAt(0).toUpperCase()) + '</text></svg>';
+    return '<div class="ta-item" data-idx="' + i + '" onmousedown="selectTA(taActors[' + i + '])">' +
+      '<img class="ta-avatar" src="' + escapeAttr(actor.avatar || avatarFallback) + '" onerror="this.src=\'' + avatarFallback + '\'">' +
+      '<div class="ta-info">' +
+        '<div class="ta-name">' + escapeHTML(name) + '</div>' +
+        '<div class="ta-handle">@' + escapeHTML(actor.handle) + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+  dropdown.classList.add('open');
+}
+
+function highlightTA() {
+  var items = document.querySelectorAll('.ta-item');
+  items.forEach(function(el, i) { el.classList.toggle('active', i === taIndex); });
+}
+
+function selectTA(actor) {
+  document.getElementById('rateHandle').value = actor.handle;
+  savedHandle = actor.handle;
+  localStorage.setItem('appviews_handle', actor.handle);
+  closeTA();
+}
+
+function closeTA() {
+  taIndex = -1;
+  taActors = [];
+  document.getElementById('taDropdown').classList.remove('open');
+}
+
+async function ensureAuth() {
+  if (authToken) return true;
+  try {
+    // Use shared service account — auth is invisible to the user
+    var res = await fetch(API_BASE + '/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'appviews-seed@linkedtrust.us', password: 'appviews2026' })
+    });
+    var data = await res.json();
+    if (data.accessToken) {
+      authToken = data.accessToken;
+      return true;
+    }
+    showMsg('Could not connect to LinkedTrust API.', 'error');
+    return false;
+  } catch (e) {
+    showMsg('Connection error: ' + e.message, 'error');
+    return false;
+  }
+}
+
+function getSourceURI() {
+  var handle = document.getElementById('rateHandle').value.trim();
+  if (!handle) return null;
+  // Save for next time
+  savedHandle = handle;
+  localStorage.setItem('appviews_handle', handle);
+  // Normalize: if they typed a full URL, keep it; otherwise build bsky profile URL
+  if (handle.startsWith('http')) return handle;
+  if (handle.startsWith('did:')) return handle;
+  // Strip leading @ if present
+  if (handle.startsWith('@')) handle = handle.slice(1);
+  return 'https://bsky.app/profile/' + handle;
+}
+
+async function submitRating() {
+  if (!currentApp) return;
+  if (selectedStars === 0) {
+    showMsg('Please select a star rating.', 'error');
+    return;
+  }
+
+  var handle = document.getElementById('rateHandle').value.trim();
+  if (!handle) {
+    showMsg('Please enter your Bluesky handle.', 'error');
+    return;
+  }
+
+  var btn = document.getElementById('rateSubmit');
+  btn.disabled = true;
+  showMsg('', '');
+
+  if (!(await ensureAuth())) {
+    btn.disabled = false;
+    return;
+  }
+
+  var sourceURI = getSourceURI();
+
+  try {
+    var body = {
+      subject: currentApp.uri,
+      claim: 'rated',
+      stars: selectedStars,
+      statement: document.getElementById('rateComment').value.trim(),
+      sourceURI: sourceURI,
+      howKnown: 'FIRST_HAND'
+    };
+
+    var res = await fetch(API_BASE + '/api/claims', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + authToken
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (res.status === 401) {
+      authToken = '';
+      if (!(await ensureAuth())) { btn.disabled = false; return; }
+      res = await fetch(API_BASE + '/api/claims', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + authToken
+        },
+        body: JSON.stringify(body)
+      });
+    }
+
+    if (!res.ok) {
+      var err = await res.json().catch(function() { return {}; });
+      throw new Error(err.message || err.error || 'Failed to submit rating');
+    }
+
+    showMsg('Rating submitted! Thank you.', 'success');
+    document.getElementById('rateComment').value = '';
+    selectedStars = 0;
+    updateStarSelector();
+
+    // Refresh reviews and card ratings
+    await loadReviews(currentApp.uri);
+    var ratings = await fetchRatings(currentApp.uri);
+    if (ratings.length > 0) {
+      var total = ratings.reduce(function(sum, r) { return sum + (Number(r.stars) || 0); }, 0);
+      ratingsCache[currentApp.uri] = { avg: total / ratings.length, count: ratings.length };
+    }
+    renderGrid(document.querySelector('.filter-btn.active').textContent.toLowerCase());
+  } catch (e) {
+    showMsg(e.message, 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function showMsg(text, type) {
+  const el = document.getElementById('rateMsg');
+  el.textContent = text;
+  el.className = 'rate-msg' + (type ? ' ' + type : '');
+}
+
+function escapeHTML(str) {
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function escapeAttr(str) {
+  return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// Close modal on Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+// Initial render
+renderGrid('all');
+loadAllRatings();
+initTypeahead();
+</script>
+</body>
+</html>

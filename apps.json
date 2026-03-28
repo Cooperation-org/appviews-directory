@@ -1,0 +1,156 @@
+[
+  {
+    "uri": "https://bsky.app",
+    "name": "Bluesky",
+    "description": "The official Bluesky social client",
+    "type": "app",
+    "image": "https://bsky.app/static/apple-touch-icon.png"
+  },
+  {
+    "uri": "https://graysky.app",
+    "name": "Graysky",
+    "description": "A sleek third-party Bluesky client for iOS and Android",
+    "type": "app",
+    "image": "https://graysky.app/favicon.ico"
+  },
+  {
+    "uri": "https://deck.blue",
+    "name": "deck.blue",
+    "description": "TweetDeck-style multi-column client for Bluesky",
+    "type": "app",
+    "image": "https://deck.blue/favicon.ico"
+  },
+  {
+    "uri": "https://grain.social",
+    "name": "Grain",
+    "description": "Decentralized photo-sharing gallery platform built on ATProto",
+    "type": "appview",
+    "image": "https://grain.social/icon-192.png"
+  },
+  {
+    "uri": "https://langit.pages.dev",
+    "name": "Langit",
+    "description": "Mobile-first Bluesky client with a clean interface",
+    "type": "app",
+    "image": "https://langit.pages.dev/favicon.ico"
+  },
+  {
+    "uri": "https://tokimekibluesky.vercel.app",
+    "name": "TOKIMEKI",
+    "description": "Japanese-designed Bluesky web client with timeline customization",
+    "type": "app",
+    "image": "https://tokimekibluesky.vercel.app/favicon.png"
+  },
+  {
+    "uri": "https://tangled.sh",
+    "name": "Tangled",
+    "description": "Git collaboration platform with decentralized code ownership on ATProto",
+    "type": "appview",
+    "image": "https://tangled.sh/favicon.ico"
+  },
+  {
+    "uri": "https://clearsky.app",
+    "name": "Clearsky",
+    "description": "Block and mute list transparency tool for ATProto",
+    "type": "app",
+    "image": "https://clearsky.app/favicon.ico"
+  },
+  {
+    "uri": "https://skyfeed.app",
+    "name": "SkyFeed",
+    "description": "Custom feed builder and viewer for Bluesky",
+    "type": "appview",
+    "image": "https://skyfeed.app/favicon.ico"
+  },
+  {
+    "uri": "https://skyview.social",
+    "name": "Skyview",
+    "description": "View Bluesky threads and posts without an account",
+    "type": "app",
+    "image": "https://skyview.social/favicon.ico"
+  },
+  {
+    "uri": "https://whtwnd.com",
+    "name": "WhiteWind",
+    "description": "Blog publishing platform built on ATProto",
+    "type": "appview",
+    "image": "https://whtwnd.com/favicon.ico"
+  },
+  {
+    "uri": "https://smokesignal.events",
+    "name": "Smoke Signal",
+    "description": "Event discovery and RSVP platform on ATProto",
+    "type": "appview",
+    "image": "https://smokesignal.events/favicon.ico"
+  },
+  {
+    "uri": "https://frontpage.fyi",
+    "name": "Frontpage",
+    "description": "Link aggregator and discussion forum on ATProto",
+    "type": "appview",
+    "image": "https://frontpage.fyi/apple-icon.png"
+  },
+  {
+    "uri": "https://bluecast.app",
+    "name": "Bluecast",
+    "description": "Podcast directory and player using ATProto social graph",
+    "type": "appview",
+    "image": "https://bluecast.app/favicon.ico"
+  },
+  {
+    "uri": "https://www.skeetsapp.com",
+    "name": "Skeets",
+    "description": "Full-featured native iOS client for Bluesky with accessibility focus",
+    "type": "app",
+    "image": "https://www.skeetsapp.com/favicon.ico"
+  },
+  {
+    "uri": "https://blueskydirectory.com",
+    "name": "Bluesky Directory",
+    "description": "Comprehensive directory of Bluesky and ATProto tools, apps, and utilities",
+    "type": "app",
+    "image": "https://blueskydirectory.com/favicon.ico"
+  },
+  {
+    "uri": "https://firesky.tv",
+    "name": "Firesky",
+    "description": "Real-time firehose visualizer for the ATProto network",
+    "type": "app",
+    "image": "https://firesky.tv/favicon.ico"
+  },
+  {
+    "uri": "https://blueviewer.pages.dev",
+    "name": "Blueviewer",
+    "description": "Public profile viewer for Bluesky accounts",
+    "type": "app",
+    "image": "https://blueviewer.pages.dev/favicon.ico"
+  },
+  {
+    "uri": "https://linkedtrust.us",
+    "name": "LinkedTrust",
+    "description": "Trust and claims platform for verifiable attestations on ATProto",
+    "type": "appview",
+    "image": "https://linkedtrust.us/static/img/logo.523bee24fbc7.svg"
+  },
+  {
+    "uri": "https://bsky.social",
+    "name": "Bluesky PDS",
+    "description": "Official Bluesky Personal Data Server hosting service",
+    "type": "appview",
+    "image": "https://bsky.app/static/apple-touch-icon.png"
+  },
+  {
+    "uri": "https://bsky.app/profile/ameboh.bsky.social",
+    "name": "Amebo Bot",
+    "description": "Your ATProto conference buddy — ask about ATmosphere Conf 2026, atproto docs, talks, speakers, and schedule",
+    "type": "app",
+    "image": "https://bsky.app/static/apple-touch-icon.png"
+  },
+  {
+    "uri": "https://recipe.exchange",
+    "name": "Recipe Exchange",
+    "description": "Decentralized recipe-sharing platform where cooks own their content on ATProto",
+    "type": "appview",
+    "image": "https://recipe.exchange/favicon.ico"
+  }
+]
